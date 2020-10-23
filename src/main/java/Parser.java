@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class Parser {
     private static Document getPage() throws IOException {
-        String url = "http://www.pogoda.spb.ru/";
+        String url = "http://www.pogoda.spb.ru";
         Document page = Jsoup.parse(new URL(url), 3000);
         return page;
     }
@@ -26,14 +26,35 @@ public class Parser {
         throw new Exception("Can't extract date from screen");
     }
 
-    private static void printFourValues(Elements values, int index) {
-        for (int i = 0; i < 4; i++) {
-            Element valueElement = values.get(i);
-            for (Element td : valueElement.select("td")) {
-                System.out.print(td.text() + "    ");
+    private static int printFourValues(Elements values, int index) {
+        int iterationCount = 4;
+        if (index == 0) {
+            Element valueElement = values.get(3);
+            boolean isMorning = valueElement.text().contains("Ночь");
+            boolean isDay = valueElement.text().contains("Утро");
+            boolean isEvening = valueElement.text().contains("День");
+            boolean isNight = valueElement.text().contains("Вечер");
+            if (isMorning) {
+                iterationCount = 4;
+            }
+            if (isDay) {
+                iterationCount = 3;
+            }
+            if (isEvening) {
+                iterationCount = 2;
+            }
+            if (isNight) {
+                iterationCount = 1;
+            }
+        }
+        for (int i = 0; i < iterationCount; i++) {
+            Element valueLine = values.get(index + i);
+            for (Element td : valueLine.select("td")) {
+                System.out.print(td.text() + "     ");
             }
             System.out.println();
         }
+        return iterationCount;
     }
 
     public static void main(String[] args) throws Exception {
@@ -47,10 +68,9 @@ public class Parser {
         for (Element name : names) {
             String dateString = name.select("th[id=dt]").text();
             String date = getDateFromString(dateString);
-            System.out.println(date + "     Явления       Температура     Давл    Влажность     Ветер");
-            printFourValues(values, index);
-
-            index++;
+            System.out.println(date + "    Явления    Температура    Давл    Влажность    Ветер");
+            int iterationCount = printFourValues(values, index);
+            index += iterationCount;
         }
     }
 }
