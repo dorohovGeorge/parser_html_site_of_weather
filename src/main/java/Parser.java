@@ -12,8 +12,7 @@ import java.util.regex.Pattern;
 public class Parser {
     private static Document getPage() throws IOException {
         String url = "http://www.pogoda.spb.ru";
-        Document page = Jsoup.parse(new URL(url), 3000);
-        return page;
+        return Jsoup.parse(new URL(url), 3000);
     }
 
     private static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");
@@ -30,22 +29,6 @@ public class Parser {
         int iterationCount = 4;
         if (index == 0) {
             Element valueElement = values.get(3);
-            /*boolean isMorning = valueElement.text().contains("Ночь");
-            boolean isDay = valueElement.text().contains("Утро");
-            boolean isEvening = valueElement.text().contains("День");
-            boolean isNight = valueElement.text().contains("Вечер");
-            if (isMorning) {
-                iterationCount = 4;
-            }
-            if (isDay) {
-                iterationCount = 3;
-            }
-            if (isEvening) {
-                iterationCount = 2;
-            }
-            if (isNight) {
-                iterationCount = 1;
-            }*/
             iterationCount = Time.howManyTimesOfDay(valueElement.text());
         }
         for (int i = 0; i < iterationCount; i++) {
