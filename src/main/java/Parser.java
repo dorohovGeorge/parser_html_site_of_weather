@@ -30,7 +30,7 @@ public class Parser {
         int iterationCount = 4;
         if (index == 0) {
             Element valueElement = values.get(3);
-            boolean isMorning = valueElement.text().contains("Ночь");
+            /*boolean isMorning = valueElement.text().contains("Ночь");
             boolean isDay = valueElement.text().contains("Утро");
             boolean isEvening = valueElement.text().contains("День");
             boolean isNight = valueElement.text().contains("Вечер");
@@ -45,7 +45,8 @@ public class Parser {
             }
             if (isNight) {
                 iterationCount = 1;
-            }
+            }*/
+            iterationCount = Time.howManyTimesOfDay(valueElement.text());
         }
         for (int i = 0; i < iterationCount; i++) {
             Element valueLine = values.get(index + i);
@@ -68,7 +69,7 @@ public class Parser {
         for (Element name : names) {
             String dateString = name.select("th[id=dt]").text();
             String date = getDateFromString(dateString);
-            System.out.println(date + "    Явления    Температура    Давл    Влажность    Ветер");
+            System.out.println(ConsoleColors.RED_BOLD_BRIGHT + date + "     Явления     Температура     Давл     Влажность     Ветер" + ConsoleColors.RESET);
             int iterationCount = printFourValues(values, index);
             index += iterationCount;
         }
