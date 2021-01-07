@@ -52,7 +52,7 @@ public class Parser {
         for (Element name : names) {
             String dateString = name.select("th[id=dt]").text();
             String date = getDateFromString(dateString);
-            System.out.println(ConsoleColors.RED_BOLD_BRIGHT + date + "     Явления     Температура     Давл     Влажность     Ветер" + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.RED_BOLD + date + "    Явления     Температура     Давл     Влажность     Ветер" + ConsoleColors.RESET);
             int iterationCount = printFourValues(values, index);
             index += iterationCount;
         }
